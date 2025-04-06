@@ -1,29 +1,29 @@
-#include "SimpleSerialSimulationDataGenerator.h"
-#include "SimpleSerialAnalyzerSettings.h"
+#include "GPIBSimulationDataGenerator.h"
+#include "GPIBAnalyzerSettings.h"
 
 #include <AnalyzerHelpers.h>
 
-SimpleSerialSimulationDataGenerator::SimpleSerialSimulationDataGenerator()
+GPIBSimulationDataGenerator::GPIBSimulationDataGenerator()
 :	mSerialText( "My first analyzer, woo hoo!" ),
 	mStringIndex( 0 )
 {
 }
 
-SimpleSerialSimulationDataGenerator::~SimpleSerialSimulationDataGenerator()
+GPIBSimulationDataGenerator::~GPIBSimulationDataGenerator()
 {
 }
 
-void SimpleSerialSimulationDataGenerator::Initialize( U32 simulation_sample_rate, SimpleSerialAnalyzerSettings* settings )
+void GPIBSimulationDataGenerator::Initialize( U32 simulation_sample_rate, GPIBAnalyzerSettings* settings )
 {
 	mSimulationSampleRateHz = simulation_sample_rate;
 	mSettings = settings;
 
-	mSerialSimulationData.SetChannel( mSettings->mInputChannel );
+	//mSerialSimulationData.SetChannel( mSettings->mInputChannel );
 	mSerialSimulationData.SetSampleRate( simulation_sample_rate );
 	mSerialSimulationData.SetInitialBitState( BIT_HIGH );
 }
 
-U32 SimpleSerialSimulationDataGenerator::GenerateSimulationData( U64 largest_sample_requested, U32 sample_rate, SimulationChannelDescriptor** simulation_channel )
+U32 GPIBSimulationDataGenerator::GenerateSimulationData( U64 largest_sample_requested, U32 sample_rate, SimulationChannelDescriptor** simulation_channel )
 {
 	U64 adjusted_largest_sample_requested = AnalyzerHelpers::AdjustSimulationTargetSample( largest_sample_requested, sample_rate, mSimulationSampleRateHz );
 
@@ -36,8 +36,9 @@ U32 SimpleSerialSimulationDataGenerator::GenerateSimulationData( U64 largest_sam
 	return 1;
 }
 
-void SimpleSerialSimulationDataGenerator::CreateSerialByte()
+void GPIBSimulationDataGenerator::CreateSerialByte()
 {
+#if 0
 	U32 samples_per_bit = mSimulationSampleRateHz / mSettings->mBitRate;
 
 	U8 byte = mSerialText[ mStringIndex ];
@@ -68,4 +69,5 @@ void SimpleSerialSimulationDataGenerator::CreateSerialByte()
 
 	//lets pad the end a bit for the stop bit:
 	mSerialSimulationData.Advance( samples_per_bit );
+#endif
 }
