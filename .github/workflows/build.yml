@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [master]
+    branches: [gpib_analyzer]
     tags:
       - '*'
   pull_request:
