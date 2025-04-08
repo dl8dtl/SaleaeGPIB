@@ -1,5 +1,6 @@
 #include "GPIBAnalyzer.h"
 #include "GPIBAnalyzerSettings.h"
+#include "GPIBAnalyzerResults.h"
 #include <AnalyzerChannelData.h>
 
 GPIBAnalyzer::GPIBAnalyzer()
@@ -88,10 +89,18 @@ void GPIBAnalyzer::WorkerThread()
         mResults->AddFrame( frame );
 
         FrameV2 frame_v2;
-        frame_v2.AddInteger( "data", data );
         const char *type = "data";
-        if (data & ATN_MASK)
+        if (data & ATN_MASK) {
+            // decode command
+            char result[128];
+            GPIBAnalyzerResults::convert_data(data, false, DisplayBase::Decimal, result, 128);
+            frame_v2.AddString("cmd/data", result);
             type = "cmd";
+        } else {
+            frame_v2.AddByte("cmd/data", data & DATA_MASK );
+            if (data & EOI_MASK)
+                frame_v2.AddBoolean("eoi", data & EOI_MASK);
+        }
 
         mResults->AddFrameV2(frame_v2, type, starting_sample, ending_sample);
         mResults->CommitResults();

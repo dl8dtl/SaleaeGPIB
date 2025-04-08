@@ -31,8 +31,8 @@ enum wireIdx {
 
 class GPIBAnalyzerResults : public AnalyzerResults
 {
-    void convert_data(U64 data, bool is_bubble, DisplayBase base, char *result, U32 max_length);
 public:
+    static void convert_data(U64 data, bool is_bubble, DisplayBase base, char *result, U32 max_length);
 	GPIBAnalyzerResults( GPIBAnalyzer* analyzer, GPIBAnalyzerSettings* settings );
 	virtual ~GPIBAnalyzerResults();
 
